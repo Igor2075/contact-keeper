@@ -10,6 +10,8 @@ function Navbar({ title, icon }) {
 			</h1>
 			<ul>
 				<Link to="/">Home</Link>
+				<Link to="/register">Register</Link>
+				<Link to="/login">Login</Link>
 				<Link to="/about">About</Link>
 			</ul>
 		</div>
