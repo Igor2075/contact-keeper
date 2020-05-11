@@ -8,7 +8,7 @@ import {
 	REGISTER_FAIL,
 	USER_LOADED,
 	AUTH_ERROR,
-	LOGIN_SUCCES,
+	LOGIN_SUCCESS,
 	LOGIN_FAIL,
 	LOGOUT,
 	CLEAR_ERRORS,
@@ -31,7 +31,7 @@ const AuthState = (props) => {
 		}
 
 		try {
-			const res = axios.get();
+			const res = await axios.get("/api/auth");
 
 			dispatch({ type: USER_LOADED, payload: res.data });
 		} catch (err) {
