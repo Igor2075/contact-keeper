@@ -1,56 +1,78 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import AlertContext from "../../context/alert/alertContext";
+import AuthContext from "../../context/auth/authContext";
 
-const Login = () => {
-	const [user, setUser] = useState({
-		email: "",
-		password: "",
-	});
+const Login = (props) => {
+  const alertContext = useContext(AlertContext);
+  const authContext = useContext(AuthContext);
 
-	const { email, password } = user;
+  const { setAlert } = alertContext;
+  const { login, error, clearErrors, isAuthenticated } = authContext;
 
-	const onChange = (e) => {
-		setUser({ ...user, [e.target.name]: e.target.value });
-	};
+  useEffect(() => {
+    if (isAuthenticated) {
+      props.history.push("/");
+    }
+    if (error === "Invalid Credentials") {
+      setAlert(error, "danger");
+      clearErrors();
+    }
+    // eslint-disable-next-line
+  }, [error, isAuthenticated, props.history]);
 
-	const onSubmit = (e) => {
-		e.preventDefault();
-		console.log("login", user);
-	};
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
 
-	return (
-		<div className="form-container">
-			<h1>
-				Account <span className="text-primary">Login</span>
-			</h1>
-			<form onSubmit={onSubmit}>
-				<div className="form-group">
-					<label htmlFor="email">Email Address</label>
-					<input
-						type="email"
-						name="email"
-						value={email}
-						onChange={onChange}
-						required
-					/>
-				</div>
-				<div className="form-group">
-					<label htmlFor="password">Password</label>
-					<input
-						type="password"
-						name="password"
-						required
-						value={password}
-						onChange={onChange}
-					/>
-				</div>
-				<input
-					type="submit"
-					value="Login"
-					className="btn btn-primary btn-block"
-				/>
-			</form>
-		</div>
-	);
+  const { email, password } = user;
+
+  const onChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    login({
+      email,
+      password,
+    });
+  };
+
+  return (
+    <div className="form-container">
+      <h1>
+        Account <span className="text-primary">Login</span>
+      </h1>
+      <form onSubmit={onSubmit}>
+        <div className="form-group">
+          <label htmlFor="email">Email Address</label>
+          <input
+            type="email"
+            name="email"
+            value={email}
+            onChange={onChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            required
+            value={password}
+            onChange={onChange}
+          />
+        </div>
+        <input
+          type="submit"
+          value="Login"
+          className="btn btn-primary btn-block"
+        />
+      </form>
+    </div>
+  );
 };
 
 export default Login;
